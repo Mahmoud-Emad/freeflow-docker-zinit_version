@@ -12,7 +12,7 @@ ENV DUMB_INIT_VERSION=1.2.2 \
 # Update the packages and install some system, Go, and Yggdrasil packages
 RUN set -ex \
     && apt-get update -y \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential cargo curl git lsb-release \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential cargo curl git lsb-release libclang-dev \
     && git clone "https://github.com/yggdrasil-network/yggdrasil-go.git" /src \
     && cd /src \
     && git reset --hard v${YGGDRASIL_VERSION} \
@@ -29,9 +29,14 @@ RUN curl https://packages.redis.io/gpg | apt-key add - \
  && apt-get update -y \
  && apt-get install -y redis
 
+# Set LIBCLANG_PATH environment variable
+ENV LIBCLANG_PATH="/usr/lib/llvm-$(clang --version | awk '/version/ {print $NF}')/lib"
+
+# Build RedisJSON
 RUN git clone "https://github.com/RedisJSON/RedisJSON.git" /redis-json \
  && cd /redis-json \
  && cargo fix --edition \
+ && export LIBCLANG_PATH=/usr/lib/llvm-$(clang --version | awk '/version/ {print $NF}')/lib \
  && cargo build --release
 
 RUN git clone --recursive "https://github.com/RediSearch/RediSearch.git" /redis-search \
@@ -47,3 +52,7 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | b
  && [ -s "$NVM_DIR/bash_completion" ] \
  && \. "$NVM_DIR/bash_completion" bash_completion \
  && npm install pm2@5.2.2 -g
+
+# Install zinit
+RUN curl -o- https://github.com/threefoldtech/zinit/releases/download/v0.2.10/zinit /sbin/zinit && \
+    chmod +x /sbin/zinit
