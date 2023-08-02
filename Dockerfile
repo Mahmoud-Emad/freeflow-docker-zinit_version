@@ -12,7 +12,7 @@ ENV DUMB_INIT_VERSION=1.2.2 \
 # Update the packages and install some system, Go, and Yggdrasil packages
 RUN set -ex \
     && apt-get update -y \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential cargo curl git \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential cargo curl git lsb-release \
     && git clone "https://github.com/yggdrasil-network/yggdrasil-go.git" /src \
     && cd /src \
     && git reset --hard v${YGGDRASIL_VERSION} \
