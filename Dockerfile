@@ -24,19 +24,18 @@ RUN set -ex \
     && chmod 0755 /tmp/dumb-init
 
 # Install redis, redis-json, redis-search
+RUN apt-get update -y && apt-get upgrade -y \
+ && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y curl software-properties-common build-essential llvm cmake libclang1 libclang-dev cargo git wget
+
 RUN curl https://packages.redis.io/gpg | apt-key add - \
  && echo "deb https://packages.redis.io/deb $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/redis.list \
  && apt-get update -y \
  && apt-get install -y redis
 
-# Set LIBCLANG_PATH environment variable
-ENV LIBCLANG_PATH="/usr/lib/llvm-$(clang --version | awk '/version/ {print $NF}')/lib"
-
 # Build RedisJSON
 RUN git clone "https://github.com/RedisJSON/RedisJSON.git" /redis-json \
  && cd /redis-json \
  && cargo fix --edition \
- && export LIBCLANG_PATH=/usr/lib/llvm-$(clang --version | awk '/version/ {print $NF}')/lib \
  && cargo build --release
 
 RUN git clone --recursive "https://github.com/RediSearch/RediSearch.git" /redis-search \
@@ -51,8 +50,36 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | b
  && \. "$NVM_DIR/nvm.sh" \
  && [ -s "$NVM_DIR/bash_completion" ] \
  && \. "$NVM_DIR/bash_completion" bash_completion \
- && npm install pm2@5.2.2 -g
+ && npm install pm2@5.2.2 -g \
+ && npm install \
+ && npm run build
 
 # Install zinit
 RUN curl -o- https://github.com/threefoldtech/zinit/releases/download/v0.2.10/zinit /sbin/zinit && \
     chmod +x /sbin/zinit
+
+# Create required dirs
+RUN mkdir /var/log/yggdrasil \
+    mkdir /appdata \
+    mkdir /appdata/user \
+    mkdir -p /etc/zinit
+
+# Coping...
+# Copy ygg things
+COPY /src/yggdrasil    /usr/bin/
+COPY /src/yggdrasilctl /usr/bin/
+COPY /tmp/dumb-init    /usr/bin/
+
+# Copy the build files
+COPY /freeflow/apps/frontend/dist /usr/share/nginx/html
+
+# Copy errors folder and ngnix.conf
+COPY ./error/public /usr/share/nginx/error
+COPY ./error/error-nginx.conf /var/tmp/error-nginx.conf
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy redis conf
+COPY /redis-json /redis-json
+COPY /redis-search /redis-search
+
+

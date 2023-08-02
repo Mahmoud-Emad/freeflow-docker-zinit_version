@@ -1,0 +1,59 @@
+version: '3'
+
+services:
+    digital_twin_spawner:
+        image: registry.gitlab.com/3bot_app_jimber/digital_twin_spawner:${digital_twin_spawner_tag}
+        container_name: digital_twin_spawner
+        build: server
+        restart: always
+        env_file:
+            - ./.env
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - /etc/digitaltwin:/config
+        networks:
+            - chatnet
+        environment:
+            - DIGITALTWIN_APPID=${DIGITALTWIN_APPID}
+            - ENVIRONMENT=${ENVIRONMENT}
+
+    # ONLY ENABLE IN DEVELOPMENT
+    digitaltwin_proxy:
+        image: nginx:alpine
+        container_name: digital_twin_proxy
+        restart: always
+        volumes:
+            - ../../docker/certs:/etc/nginx/certs
+            - ./proxy/nginx.conf:/etc/nginx/nginx.conf
+        ports:
+            - 443:443
+            - 80:80
+        networks:
+            - chatnet
+
+    digital_twin_frontend:
+        image: registry.gitlab.com/3bot_app_jimber/digital_twin_frontend:${digital_twin_frontend_tag}
+        container_name: digital_twin_frontend
+        restart: always
+        build: frontend
+        networks:
+            - chatnet
+
+    onlyoffice-documentserver:
+        build:
+            context: ./onlyoffice
+        container_name: onlyoffice-documentserver
+        environment:
+            - JWT_ENABLED=false
+        restart: always
+        networks:
+            - chatnet
+        sysctls:
+            - net.ipv6.conf.all.disable_ipv6=0
+        privileged: true
+        devices:
+            - /dev/net/tun:/dev/net/tun
+
+networks:
+    chatnet:
+        external: true
