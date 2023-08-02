@@ -1,7 +1,9 @@
 FROM ubuntu:20.04
 
 # Set work dir
-WORKDIR /freeflow
+WORKDIR /app
+COPY . .
+RUN ls
 
 # Set environment variables for NVM, Go, and Yggdrasil installation
 ENV DUMB_INIT_VERSION=1.2.2 \
@@ -50,9 +52,8 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | b
  && \. "$NVM_DIR/nvm.sh" \
  && [ -s "$NVM_DIR/bash_completion" ] \
  && \. "$NVM_DIR/bash_completion" bash_completion \
- && npm install pm2@5.2.2 -g \
- && npm install \
- && npm run build
+ && yarn add pm2@5.2.2 -g \
+ && yarn && yarn build
 
 # Install zinit
 RUN curl -Lo /sbin/zinit https://github.com/threefoldtech/zinit/releases/download/v0.2.10/zinit \
@@ -71,7 +72,7 @@ COPY /src/yggdrasilctl /usr/bin/
 COPY /tmp/dumb-init    /usr/bin/
 
 # Copy the build files
-COPY /freeflow/apps/frontend/dist /usr/share/nginx/html
+COPY /app/apps/frontend/dist /usr/share/nginx/html
 
 # Copy errors folder and ngnix.conf
 COPY ./error/public /usr/share/nginx/error
