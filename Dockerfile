@@ -55,8 +55,8 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | b
  && npm run build
 
 # Install zinit
-RUN curl -o- https://github.com/threefoldtech/zinit/releases/download/v0.2.10/zinit /sbin/zinit && \
-    chmod +x /sbin/zinit
+RUN curl -Lo /sbin/zinit https://github.com/threefoldtech/zinit/releases/download/v0.2.10/zinit \
+ && chmod +x /sbin/zinit
 
 # Create required dirs
 RUN mkdir /var/log/yggdrasil \
