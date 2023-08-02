@@ -1,0 +1,19 @@
+{
+    "private": true,
+    "scripts": {
+        "build": "turbo run build",
+        "migrate": "turbo run migrate --filter=./apps/backend",
+        "dev": "turbo run dev",
+        "format": "prettier --write .",
+        "prepare": "husky install"
+    },
+    "devDependencies": {
+        "husky": "^7.0.0",
+        "prettier": "^2.6.2",
+        "turbo": "^1.2.5"
+    },
+    "workspaces": [
+        "packages/*",
+        "apps/*"
+    ]
+}

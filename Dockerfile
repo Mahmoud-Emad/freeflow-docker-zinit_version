@@ -25,7 +25,7 @@ RUN set -ex \
 
 # Install redis, redis-json, redis-search
 RUN apt-get update -y && apt-get upgrade -y \
- && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y curl software-properties-common build-essential llvm cmake libclang1 libclang-dev cargo git wget
+ && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y curl software-properties-common build-essential llvm cmake libclang1 libclang-dev cargo
 
 RUN curl https://packages.redis.io/gpg | apt-key add - \
  && echo "deb https://packages.redis.io/deb $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/redis.list \
