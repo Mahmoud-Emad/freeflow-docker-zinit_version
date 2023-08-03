@@ -1,7 +1,5 @@
 FROM ubuntu:20.04
 
-# Set work dir
-WORKDIR /app
 COPY . .
 RUN ls
 
@@ -52,7 +50,8 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | b
  && \. "$NVM_DIR/nvm.sh" \
  && [ -s "$NVM_DIR/bash_completion" ] \
  && \. "$NVM_DIR/bash_completion" bash_completion \
- && yarn add pm2@5.2.2 -g \
+ && npm install yarn -g \
+ && yarn add --ignore-workspace-root-check pm2@5.2.2 \
  && yarn && yarn build
 
 # Install zinit
@@ -72,7 +71,7 @@ COPY /src/yggdrasilctl /usr/bin/
 COPY /tmp/dumb-init    /usr/bin/
 
 # Copy the build files
-COPY /app/apps/frontend/dist /usr/share/nginx/html
+COPY /apps/frontend/dist /usr/share/nginx/html
 
 # Copy errors folder and ngnix.conf
 COPY ./error/public /usr/share/nginx/error
