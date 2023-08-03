@@ -1,1 +1,7 @@
+.turbo
+node_modules
+appdata*
+*.log
+docker/redis.conf
+**/.DS_Store
 .vscode

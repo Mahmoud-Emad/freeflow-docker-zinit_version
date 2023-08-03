@@ -86,7 +86,7 @@
         "@typescript-eslint/eslint-plugin": "^5.33.1",
         "@typescript-eslint/parser": "^5.33.1",
         "concurrently": "^7.3.0",
-        "custom-types": "*",
+        "custom-types": "~0.0.6",
         "eslint": "^8.22.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-import": "^2.26.0",

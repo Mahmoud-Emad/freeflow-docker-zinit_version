@@ -25,7 +25,7 @@ RUN set -ex \
 
 # Install redis, redis-json, redis-search
 RUN apt-get update -y && apt-get upgrade -y \
- && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y curl software-properties-common build-essential llvm cmake libclang1 libclang-dev cargo
+ && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y curl software-properties-common apt-utils build-essential llvm cmake libclang1 libclang-dev cargo
 
 RUN curl https://packages.redis.io/gpg | apt-key add - \
  && echo "deb https://packages.redis.io/deb $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/redis.list \
@@ -64,7 +64,6 @@ RUN mkdir /var/log/yggdrasil \
     mkdir /appdata/user \
     mkdir -p /etc/zinit
 
-# Coping...
 # Copy ygg things
 COPY /src/yggdrasil    /usr/bin/
 COPY /src/yggdrasilctl /usr/bin/

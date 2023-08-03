@@ -5652,6 +5652,13 @@ csstype@^3.1.0:
   resolved "https://registry.npmjs.org/csstype/-/csstype-3.1.0.tgz"
   integrity sha512-uX1KG+x9h5hIJsaKR9xHUeUraxf8IODOwq9JLNPq6BwB04a/xgpq3rcx47l5BZu5zBPlgD342tdke3Hom/nJRA==
 
+custom-types@~0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/custom-types/-/custom-types-0.0.6.tgz#b51518bed6be397434faf5f6207ea564a56be22e"
+  integrity sha512-67oR4d4s8goj4GXM2VR69apRjtFTFElwNfH6BguhdrJ0YnLmWDJ5spKmBOaqLRAKLMj7AgywT2G7hS6s/Gbxkw==
+  dependencies:
+    types.js latest
+
 date-fns@^2.16.1:
   version "2.29.1"
   resolved "https://registry.npmjs.org/date-fns/-/date-fns-2.29.1.tgz"
@@ -12414,6 +12421,11 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
+
+types.js@latest:
+  version "1.9.5"
+  resolved "https://registry.yarnpkg.com/types.js/-/types.js-1.9.5.tgz#b2579e177d4aa79b50aa552abf8d5b34e61c8e65"
+  integrity sha512-FFBX+14ze6YpvxOgQtl4mK2M7pzAshv9zB3pQe/dlbwTccGqFQdFtrxkKEHMiIk0ttbhHIU5GE6D4GxHbf776g==
 
 typescript@^4.5.4, typescript@^4.7.4:
   version "4.7.4"
